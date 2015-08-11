@@ -35,30 +35,30 @@ public:
 	
 ListNode* reverseBetween(ListNode* head, int m, int n) 
 {
-	ListNode *pre = head, *post, *curr, **tail;
+	ListNode *ppre = head, *pre, *post, *curr, **tail;
 	if(!head) return NULL;
 	
-	for(int i = 1; i < m && pre; i++)	
-		pre = pre->next;
-	cout << pre->val << endl;
-	if(!pre->next) return NULL;
+	for(int i = 1; i < m-1 && ppre; i++)	
+		ppre = ppre->next;
+	cout << "head = " << ppre->val << endl;
+	if(!ppre->next) return NULL;
+	pre = ppre->next;
 	curr = pre->next;
-	tail = &curr;
+	tail = &(pre->next);
+	cout << "end: " << curr->val << " " << (*tail)->val << endl;
 	int count = m;
+	post = curr->next;
 	while(curr && count < n)
 	{
-		cout << curr->val << endl;
+		cout << curr->val << "n " << n << " count " << count << endl;
 		post = curr->next;
-		curr->next = pre;
-		pre = curr;
+		curr->next = ppre->next;
+		ppre->next = curr;
 		curr = post;
 		count++;
 	}
-	cout << curr->val << endl;
-	if(!curr && count >= n)
-	{
-		*tail = curr;
-	}
+	cout << "end: " << curr->val << " " << (*tail)->val << endl;
+	*tail = curr;
 	return head;
 }
 };
@@ -66,7 +66,8 @@ ListNode* reverseBetween(ListNode* head, int m, int n)
 void printList(struct ListNode *head)
 {
 	struct ListNode *cur = head;
-	while(cur != NULL)
+	int total = 10;
+	while(cur != NULL && (total-- >= 0))
 	{
 		cout << cur->val << " ";
 		cur = cur->next;
@@ -85,5 +86,5 @@ int main()
 	}
 	printList(head);
 	//A.reverseBetween(head, 2, 4);
-	printList(A.reverseBetween(head, 2, 4));
+	printList(A.reverseBetween(head, 2, 6));
 }

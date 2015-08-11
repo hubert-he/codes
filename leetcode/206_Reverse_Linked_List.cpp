@@ -33,19 +33,34 @@ public:
 		return head;
     }
 	
-	ListNode* reverseBetween(ListNode* head, int m, int n) {
-        int count = 0;
-		ListNode *post, *curr;
-		if(!head) return NULL;
-		curr = head->next;
-		while(curr)
-		{
-			if(count++ < m) 
-				continue;
-			head = curr;
-			curr = head->next;
-		}
-    }
+ListNode* reverseBetween(ListNode* head, int m, int n) 
+{
+	ListNode *pre = head, *post, *curr, **tail;
+	if(!head) return NULL;
+	
+	for(int i = 1; i < m && pre; i++)	
+		pre = pre->next;
+	cout << pre->val << endl;
+	if(!pre->next) return NULL;
+	curr = pre->next;
+	tail = &curr;
+	int count = m;
+	while(curr && count < n)
+	{
+		cout << curr->val << endl;
+		post = curr->next;
+		curr->next = pre;
+		pre = curr;
+		curr = post;
+		count++;
+	}
+	cout << curr->val << endl;
+	if(!curr && count >= n)
+	{
+		*tail = curr;
+	}
+	return head;
+}
 };
 
 void printList(struct ListNode *head)
@@ -63,11 +78,12 @@ int main()
 {
 	ListNode *head = NULL, *tmp = NULL;
 	Solution A;
-	char a[] = {1};
-	for(int i = 0; i < 1; i++)
+	char a[] = {1, 2, 3, 4, 5, 6};
+	for(int i = 0; i < 6; i++)
 	{
 		head = new ListNode(a[i], head);
 	}
 	printList(head);
-	printList(A.reverseList(head));
+	//A.reverseBetween(head, 2, 4);
+	printList(A.reverseBetween(head, 2, 4));
 }
